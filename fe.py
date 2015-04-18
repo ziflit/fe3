@@ -12,6 +12,7 @@ def clean(s):
     """
     return " ".join(re.findall(r'\w+', s,flags = re.UNICODE | re.LOCALE)).lower()
 
+
 def get_data_tsv(loc_dataset):
     #Devuelve de a 1 linea.
     for e, line in enumerate(open(loc_dataset,"rb")):
@@ -32,20 +33,29 @@ def get_data_tsv(loc_dataset):
                         features.append(posicion)
                 label = int(r[1])
             else: #test set
-                features = [(hash(f)%N) for f in r[1].split()]
-                label = 1
+				for word in r[1].split(): 
+					posicion = hash(word)%N
+					if posicion not in features:
+						features.append(posicion)
+                        
+				label = 1
             #Saque los bigram, no tenia sentido dejarlos, se busca eficiencia y pocas dimensiones.
             yield label, id, features
+            
+            
 def distance(v, w, N):
     """
     Calcula distancia entre dos vectores V y W, vectores dispersos que representan a otros 
     P y Q de dimension N.
     """
+    
+    
 def cargarMatriz(archivo):
     m = []
     for i, (label, id, features) in enumerate( get_data_tsv(archivo) ):
         m.append((id, label, sorted(features)))
     return m
+
 
 if __name__ == "__main__":
     """
@@ -61,3 +71,5 @@ if __name__ == "__main__":
     print len(entrenamiento[0][2])
     # carga matriz con reviews para prueba. Label sobra, pero es mas facil que reescribir el metodo. Se reescribe label con el resultado buscado.
     prueba = cargarMatriz("testData.tsv") 
+    print prueba[0]
+    print len(prueba[0][2])
