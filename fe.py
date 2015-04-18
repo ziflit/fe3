@@ -78,6 +78,18 @@ def calcularVecinos(matrizEntrenamiento, reviewPrueba):
             vecinos = sorted(vecinos, key=getKey)
     return vecinos       
 
+def calcularProbabilidadPositiva(vecinos):
+    """
+    Dado un vector de vecinos decide la probabilidad de que sea positiva calculando de la forma
+    vecinosPositivos / vecinosTotales
+    """
+    vecinosTotales = K
+    vecinosPositivos = 0.0
+    for vec in vecinos:
+        if ( vec[1] == 1): vecinosPositivos +=1
+    return (vecinosPositivos * 1.0) / (vecinosTotales * 1.0)
+    
+
 def cargarMatriz(archivo):
     m = []
     for i, (label, id, features) in enumerate( get_data_tsv(archivo) ):
@@ -85,6 +97,18 @@ def cargarMatriz(archivo):
     return m
 
 
+def outputToCSV(entrenamiento, prueba):
+    """
+    Genera el output de kaggle
+    de la forma:
+    id  sentiment
+    """
+    with open("resultadofe3.csv", "wb") as outfile:
+        outfile.write('"id","sentiment"'+"\n")
+        for p in prueba:
+            vecinos = calcularVecinos(entrenamiento, p[2])
+            probabilidad = calcularProbabilidadPositiva(vecinos)
+            outfile.write("%s,%s\n"%(p[0],probabilidad))
 if __name__ == "__main__":
     """
         dimensiones tomadas: 550 en un principio (TODO: Ajustar el numero.)
@@ -95,11 +119,11 @@ if __name__ == "__main__":
        -Tomo el archivo de pruebas y por cada review que tengo
     """
     entrenamiento = cargarMatriz("labeledTrainData.tsv") # matriz con reviews de entrenamiento.
-    print entrenamiento[0]
-    print len(entrenamiento[0][2])
+    # print entrenamiento[0]
+    # print len(entrenamiento[0][2])
     # carga matriz con reviews para prueba. Label sobra, pero es mas facil que reescribir el metodo. Se reescribe label con el resultado buscado.
     prueba = cargarMatriz("testData.tsv") 
-    print prueba[0]
-    print len(prueba[0][2])
+    # print prueba[0]
+    # print len(prueba[0][2])
 
-    print calcularVecinos(entrenamiento, prueba[0][2])
+    outputToCSV(entrenamiento,prueba)
