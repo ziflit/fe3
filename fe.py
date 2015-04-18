@@ -51,10 +51,10 @@ def distancia(v, w):
 
     while (i < N):
         p = q = 0
-        if ( v[j] == i):
+        if ( ( j < len(v) ) and ( v[j] == i) ):
             p = 1
             j+=1
-        if ( w[k] == i):
+        if ( ( k < len(w) ) and ( w[k] == i) ):
             q = 1
             k+=1
         suma += (p - q) ** 2
