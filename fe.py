@@ -62,7 +62,17 @@ def distancia(v, w):
 
     return suma
     
-    
+
+def calcularVecinos(matrizEntrenamiento, reviewPrueba):
+    vecinos = [N+1] * K
+    for tuplaEntrenamiento in matrizEntrenamiento:
+        v = tuplaEntrenamiento[2]
+        distanciaEntreVectores = distancia(v, reviewPrueba)
+        if ( distanciaEntreVectores < vecinos[K-1]): 
+            vecinos[K-1] = distanciaEntreVectores
+            vecinos = sorted(vecinos)
+    return vecinos       
+
 def cargarMatriz(archivo):
     m = []
     for i, (label, id, features) in enumerate( get_data_tsv(archivo) ):
@@ -86,3 +96,5 @@ if __name__ == "__main__":
     prueba = cargarMatriz("testData.tsv") 
     print prueba[0]
     print len(prueba[0][2])
+
+    print calcularVecinos(entrenamiento, prueba[0][2])
