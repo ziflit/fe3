@@ -61,7 +61,12 @@ def distancia(v, w):
         i+=1
 
     return suma
-    
+
+
+#Para el sort
+def getkey(item):
+    return item[0]    
+
 
 def calcularVecinos(matrizEntrenamiento, reviewPrueba):
     vecinos = [N+1] * K
@@ -69,8 +74,8 @@ def calcularVecinos(matrizEntrenamiento, reviewPrueba):
         v = tuplaEntrenamiento[2]
         distanciaEntreVectores = distancia(v, reviewPrueba)
         if ( distanciaEntreVectores < vecinos[K-1]): 
-            vecinos[K-1] = distanciaEntreVectores
-            vecinos = sorted(vecinos)
+            vecinos[K-1] = (distanciaEntreVectores, tuplaEntrenamiento[1] )
+            vecinos = sorted(vecinos, key=getkey)
     return vecinos       
 
 def cargarMatriz(archivo):
