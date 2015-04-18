@@ -1,6 +1,5 @@
 import re
 
-
 #Constantes N y K: N es la cantidad de dimensiones, K la cantidad de NN a considerar.
 N = 550
 K = 5
@@ -11,6 +10,7 @@ def clean(s):
         Devuelve mas palabras que las que reporta wordcount. Revisar
     """
     return " ".join(re.findall(r'\w+', s,flags = re.UNICODE | re.LOCALE)).lower()
+
 
 def get_data_tsv(loc_dataset):
     #Devuelve de a 1 linea.
@@ -36,16 +36,35 @@ def get_data_tsv(loc_dataset):
                 label = 1
             #Saque los bigram, no tenia sentido dejarlos, se busca eficiencia y pocas dimensiones.
             yield label, id, features
-def distance(v, w, N):
+
+
+def distancia(v, w):
     """
     Calcula distancia entre dos vectores V y W, vectores dispersos que representan a otros 
     P y Q de dimension N.
     """
+    i = j = k = suma = 0
+
+    while (i < N):
+        p = q = 0
+        if ( v[j] == i):
+            p = 1
+            j+=1
+        if ( w[k] == i):
+            q = 1
+            k+=1
+        suma += (p - q) ** 2
+        i+=1
+
+    return suma
+
+
 def cargarMatriz(archivo):
     m = []
     for i, (label, id, features) in enumerate( get_data_tsv(archivo) ):
         m.append((id, label, sorted(features)))
     return m
+
 
 if __name__ == "__main__":
     """
